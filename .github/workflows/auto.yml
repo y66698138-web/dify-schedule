@@ -2,7 +2,7 @@ name: Auto
 
 on:
   schedule:
-    - cron: "0 12 * * *" # 日本時間 午前11:00（JST） / 北京时间 午前10:00（CST）
+    - cron: "0 12 * * *" 
   workflow_dispatch:
 
 
