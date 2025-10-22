@@ -8,7 +8,7 @@ on:
 
 env:
   DIFY_TOKENS: ${{ secrets.DIFY_TOKENS }}
-  DIFY_BASE_URL: ${{ secrets.DIFY_BASE_URL }}
+  DIFY_BASE_URL: "https://api.dify.ai/v1/workflows"  # ←固定でOK（APIアクセスページのベースURL）
   DIFY_INPUTS: ${{ secrets.DIFY_INPUTS }}
   EMAIL_USER: ${{ secrets.EMAIL_USER }}
   EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
