@@ -2,33 +2,28 @@ name: Auto
 
 on:
   schedule:
-    - cron: "10 3 * * *"  # JST 14:10
+    - cron: "10 5 * * *"  # JST 14:10 → UTC 5:10
   workflow_dispatch:
-
 
 env:
   DIFY_TOKENS: ${{ secrets.DIFY_TOKENS }}
-  DIFY_BASE_URL: "https://api.dify.ai/v1/workflows"  # ←固定でOK（APIアクセスページのベースURL）
-  DIFY_INPUTS: ${{ secrets.DIFY_INPUTS }}
-  EMAIL_USER: ${{ secrets.EMAIL_USER }}
-  EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
-  EMAIL_TO: ${{ secrets.EMAIL_TO }}
-  DINGDING_WEBHOOK: ${{ secrets.DINGDING_WEBHOOK }}
-  PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
-  WEIXIN_WEBHOOK: ${{ secrets.WEIXIN_WEBHOOK }}
-  SERVERPUSHKEY: ${{ secrets.SERVERPUSHKEY }}
-  FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
-  AIBOTK_KEY: ${{ secrets.AIBOTK_KEY }}
-  AIBOTK_ROOM_RECIVER: ${{ secrets.AIBOTK_ROOM_RECIVER }}
-  AIBOTK_CONTACT_RECIVER: ${{ secrets.AIBOTK_CONTACT_RECIVER }}
+  DIFY_BASE_URL: "http://172.16.6.241/v1/workflows/run"  # 社内DifyのAPIエンドポイント
+  DIFY_WORKFLOW_ID: "hpayW0cZj8unBxVr"
 
 jobs:
   DifyWorkflow:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-      - name: Run Project
+      - name: Call Dify Workflow
         run: |
-          yarn
-          yarn workflowDify
+          curl -X POST "$DIFY_BASE_URL" \
+          -H "Authorization: Bearer $DIFY_TOKENS" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "workflow_id": "'"$DIFY_WORKFLOW_ID"'",
+            "inputs": {
+              "date": "'$(date +%Y-%m-%d)'"
+            },
+            "response_mode": "blocking"
+          }'
+``
