@@ -2,13 +2,13 @@ name: Auto
 
 on:
   schedule:
-    - cron: "10 5 * * *"  # JST 14:10 → UTC 5:10
+    - cron: "10 5 * * *"
   workflow_dispatch:
 
 env:
-  DIFY_TOKENS: ${{ secrets.DIFY_TOKENS }}
-  DIFY_BASE_URL: "http://172.16.6.241/v1/workflows/run"  # 社内DifyのAPIエンドポイント
-  DIFY_WORKFLOW_ID: "hpayW0cZj8unBxVr"
+  DIFY_API_KEY: ${{ secrets.DIFY_API_KEY }}
+  DIFY_API_URL: ${{ secrets.DIFY_API_URL }}
+  DIFY_WORKFLOW_ID: ${{ secrets.DIFY_WORKFLOW_ID }}
 
 jobs:
   DifyWorkflow:
@@ -16,8 +16,8 @@ jobs:
     steps:
       - name: Call Dify Workflow
         run: |
-          curl -X POST "$DIFY_BASE_URL" \
-          -H "Authorization: Bearer $DIFY_TOKENS" \
+          curl -X POST "$DIFY_API_URL" \
+          -H "Authorization: Bearer $DIFY_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{
             "workflow_id": "'"$DIFY_WORKFLOW_ID"'",
@@ -26,4 +26,3 @@ jobs:
             },
             "response_mode": "blocking"
           }'
-``
